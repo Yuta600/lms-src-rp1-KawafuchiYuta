@@ -28,6 +28,9 @@ import jp.co.sss.lms.util.TrainingTime;
  * 
  * @author 東京ITスクール
  */
+/**
+ * 
+ */
 @Service
 public class StudentAttendanceService {
 
@@ -332,6 +335,25 @@ public class StudentAttendanceService {
 		}
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
+	}
+	
+	
+	/**
+	 * 過去日未入力チェック処理
+	 * 
+	 * @return 過去日未入力有無判定結果（true:有、false:無）
+	 */
+	public Boolean notEnterCheck(Integer LsmUserid, short deleteFlag, Date trainingDate) throws ParseException {
+		
+		// 過去日の勤怠が未入力の件数を取得
+		int notEnterCount = tStudentAttendanceMapper.notEnterCount(LsmUserid, deleteFlag, trainingDate);
+		
+		// 1件以上存在する場合
+		if (notEnterCount >= 1) {
+			return true;
+		}
+		// 存在しない場合
+		return false;
 	}
 
 }

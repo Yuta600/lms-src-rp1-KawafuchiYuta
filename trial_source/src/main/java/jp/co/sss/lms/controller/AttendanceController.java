@@ -1,6 +1,8 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,10 @@ import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
+import jp.co.sss.lms.service.UserService;
+import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
+import jp.co.sss.lms.util.LoginUserUtil;
 
 /**
  * 勤怠管理コントローラ
@@ -29,6 +34,12 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	@Autowired
+	private AttendanceUtil attendanceUtil;
+	@Autowired
+	private LoginUserUtil loginUserUtil;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 勤怠管理画面 初期表示
@@ -40,11 +51,20 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(Integer ImsUserId, Integer courseId, Model model) throws ParseException {
 
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+		
+		// 本日日付を取得し、年月日形式にフォーマット
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		String trainingDate = sdf.format(attendanceUtil.getTrainingDate());
+		Date dateOnly = sdf.parse(trainingDate);
+		
+		// 過去日未入力チェックの結果を取得
+		boolean notEnterFlag = studentAttendanceService.notEnterCheck(loginUserDto.getLmsUserId(), (short) 0, dateOnly);
+		model.addAttribute("notEnterFlag", notEnterFlag);
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		return "attendance/detail";
