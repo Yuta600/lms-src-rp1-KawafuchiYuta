@@ -1,8 +1,6 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,8 @@ import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
-import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
+import jp.co.sss.lms.util.LoginUserUtil;
 
 /**
  * 勤怠管理コントローラ
@@ -33,11 +31,11 @@ public class AttendanceController {
 	@Autowired
 	private LoginUserDto loginUserDto;
 	@Autowired
-	private AttendanceUtil attendanceUtil;
+	private LoginUserUtil loginUserUtil;
 
 	/**
 	 * 勤怠管理画面 初期表示
-	 * 
+	 * @author 川渕佑太  – Task.25
 	 * @param lmsUserId
 	 * @param courseId
 	 * @param model
@@ -47,20 +45,18 @@ public class AttendanceController {
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Integer ImsUserId, Integer courseId, Model model) throws ParseException {
 		
+		// 川渕佑太 – Task.25
 		// 本日日付を取得し、年月日形式にフォーマット
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		String trainingDate = sdf.format(attendanceUtil.getTrainingDate());
-		Date dateOnly = sdf.parse(trainingDate);
-
-		// 過去日未入力チェックの結果を取得
-		boolean notEnterFlag = studentAttendanceService.notEnterCheck(loginUserDto.getLmsUserId(), (short) 0, dateOnly);
-		
+		if (loginUserUtil.isStudent()) {
+			// 過去日未入力チェックの結果を取得
+			boolean notEnterFlag = studentAttendanceService.notEnterCheck();
+			
+			// modelへの値の設定
+			model.addAttribute("notEnterFlag", notEnterFlag);
+		}
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		
-		// modelへの値の設定
-		model.addAttribute("notEnterFlag", notEnterFlag);
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		return "attendance/detail";

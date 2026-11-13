@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -340,18 +341,21 @@ public class StudentAttendanceService {
 	
 	/**
 	 * 過去日未入力チェック処理
-	 * 
-	 * @param lsmUserid
-	 * @param deleteFlag
-	 * @param trainingDate
+	 * @author 川渕佑太  – Task.25
 	 * @return 過去日未入力有無判定結果（true:有、false:無）
 	 * @throws ParseException
 	 */
-	public Boolean notEnterCheck(Integer lsmUserId, short deleteFlag, Date trainingDate) throws ParseException {
+	public Boolean notEnterCheck() throws ParseException {
 		
+		// 本日日付を取得し、年月日形式にフォーマット
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		String trainingDate = sdf.format(attendanceUtil.getTrainingDate());
+		Date dateOnly = sdf.parse(trainingDate);
+		
+		final short DELETE_FLG_0 = 0;
 		// 過去日の勤怠が未入力の件数を取得
-		int notEnterCount = tStudentAttendanceMapper.notEnterCount(lsmUserId, deleteFlag, trainingDate);
-		
+		int notEnterCount = tStudentAttendanceMapper.notEnterCount(loginUserUtil.getLoginUserDto().getLmsUserId(), DELETE_FLG_0, dateOnly);
+
 		// 1件以上存在する場合
 		if (notEnterCount >= 1) {
 			return true;
