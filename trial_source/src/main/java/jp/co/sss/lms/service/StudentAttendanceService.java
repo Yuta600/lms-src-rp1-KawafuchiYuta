@@ -341,12 +341,16 @@ public class StudentAttendanceService {
 	/**
 	 * 過去日未入力チェック処理
 	 * 
+	 * @param lsmUserid
+	 * @param deleteFlag
+	 * @param trainingDate
 	 * @return 過去日未入力有無判定結果（true:有、false:無）
+	 * @throws ParseException
 	 */
-	public Boolean notEnterCheck(Integer LsmUserid, short deleteFlag, Date trainingDate) throws ParseException {
+	public Boolean notEnterCheck(Integer lsmUserId, short deleteFlag, Date trainingDate) throws ParseException {
 		
 		// 過去日の勤怠が未入力の件数を取得
-		int notEnterCount = tStudentAttendanceMapper.notEnterCount(LsmUserid, deleteFlag, trainingDate);
+		int notEnterCount = tStudentAttendanceMapper.notEnterCount(lsmUserId, deleteFlag, trainingDate);
 		
 		// 1件以上存在する場合
 		if (notEnterCount >= 1) {

@@ -86,27 +86,20 @@
 			const minutes = ('0' + today.getMinutes()).slice(-2);
 			return hours + ':' + minutes;
 		}
-	</script>
-	<script th:inline="javascript">
-        /*<![CDATA[*/
-        
-        // サーバー側でスコープ登録したBoolean値を受け取る (true または false が入る)
+		/*<![CDATA[*/
+		// 過去日未入力フラグを取得
         const notEnterFlag = /*[[${notEnterFlag}]]*/ false;
 
         // 画面読み込み完了時に実行
-        window.addEventListener('DOMContentLoaded', function() {
-			/* jQueryを使っている場合は以下の記述でも画面読み込み時の操作を定義できる
-				$(document).ready(function () {
-			*/
-            
-            // trueならアラートを出す
+        $(document).ready(function () {
+            // 過去日未入力の場合
             if (notEnterFlag) {
                 alert("過去日の勤怠に未入力があります。");
             }
         });
         
         /*]]>*/
-    </script>
+	</script>
 
 </body>
 </html>

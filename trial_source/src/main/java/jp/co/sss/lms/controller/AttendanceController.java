@@ -46,18 +46,20 @@ public class AttendanceController {
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Integer ImsUserId, Integer courseId, Model model) throws ParseException {
-
-		// 勤怠一覧の取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		
 		// 本日日付を取得し、年月日形式にフォーマット
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		String trainingDate = sdf.format(attendanceUtil.getTrainingDate());
 		Date dateOnly = sdf.parse(trainingDate);
-		
+
 		// 過去日未入力チェックの結果を取得
 		boolean notEnterFlag = studentAttendanceService.notEnterCheck(loginUserDto.getLmsUserId(), (short) 0, dateOnly);
+		
+		// 勤怠一覧の取得
+		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+		
+		// modelへの値の設定
 		model.addAttribute("notEnterFlag", notEnterFlag);
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
