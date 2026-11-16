@@ -146,5 +146,55 @@ public class AttendanceUtil {
 		}
 		return false;
 	}
+	
+	/**
+	 * 時間(時)の切り出し
+	 * 
+	 * @param time
+	 * @return 出退勤時間(時間)
+	 */
+	public Integer getHour(String time) {
+		return Integer.parseInt(time.substring(0, 2));
+	}
+	
+	/**
+	 * 時間(分)の切り出し
+	 * 
+	 * @param time
+	 * @return 出退勤時間(分)
+	 */
+	public Integer getMinute(String time) {
+		System.out.println(Integer.parseInt(time.substring(3, 5)));
+		return Integer.parseInt(time.substring(3, 5));
+	}
+	
+	/**
+	 * 時間のプルダウンマップを生成
+	 * 
+	 * @return 引数から切り出した時間(分)
+	 */
+	public LinkedHashMap<Integer, String> setHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
+		map.put(null, "");
+		map.put(0, "00");
+		for (int i = 0; i < 24; i++) {
+			map.put(i, String.format("%02d", i));
+		}
+		return map;
+	}
+	
+	/**
+	 * 分のプルダウンマップを生成
+	 * 
+	 * @return 引数から切り出した時間(分)
+	 */
+	public LinkedHashMap<Integer, String> setMinuteMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
+		map.put(null, "");
+		for (int i = 0; i < 60; i++) {
+			map.put(i, String.format("%02d", i));
+		}
+		return map;
+	}
 
 }
