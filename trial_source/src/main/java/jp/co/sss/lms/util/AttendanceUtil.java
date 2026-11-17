@@ -150,8 +150,9 @@ public class AttendanceUtil {
 	/**
 	 * 時間(時)の切り出し
 	 * 
+	 * @author 川渕佑太 – Task.26
 	 * @param time
-	 * @return 出退勤時間(時間)
+	 * @return 引数から切り出した時間
 	 */
 	public Integer getHour(String time) {
 		return Integer.parseInt(time.substring(0, 2));
@@ -160,25 +161,25 @@ public class AttendanceUtil {
 	/**
 	 * 時間(分)の切り出し
 	 * 
+	 * @author 川渕佑太 – Task.26
 	 * @param time
-	 * @return 出退勤時間(分)
+	 * @return 引数から切り出した分
 	 */
 	public Integer getMinute(String time) {
-		System.out.println(Integer.parseInt(time.substring(3, 5)));
 		return Integer.parseInt(time.substring(3, 5));
 	}
 	
 	/**
 	 * 時間のプルダウンマップを生成
 	 * 
-	 * @return 引数から切り出した時間(分)
+	 * @author 川渕佑太 – Task.26
+	 * @return プルダウン選択肢用の時マップ
 	 */
 	public LinkedHashMap<Integer, String> setHourMap() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
-		map.put(0, "00");
-		for (int i = 0; i < 24; i++) {
-			map.put(i, String.format("%02d", i));
+		for (int i = Constants.MIN_HOUR; i < Constants.MAX_HOUR; i++) {
+			map.put(i, String.format(Constants.TIME_FORMAT, i));
 		}
 		return map;
 	}
@@ -186,13 +187,14 @@ public class AttendanceUtil {
 	/**
 	 * 分のプルダウンマップを生成
 	 * 
-	 * @return 引数から切り出した時間(分)
+	 * @author 川渕佑太 – Task.26
+	 * @return プルダウン選択肢用の分マップ
 	 */
 	public LinkedHashMap<Integer, String> setMinuteMap() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
-		for (int i = 0; i < 60; i++) {
-			map.put(i, String.format("%02d", i));
+		for (int i = Constants.MIN_MINUTE; i < Constants.MAX_MINUTE; i++) {
+			map.put(i, String.format(Constants.TIME_FORMAT, i));
 		}
 		return map;
 	}

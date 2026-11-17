@@ -362,5 +362,20 @@ public interface Constants {
 	/** 管理者フラグ */
 	public static final Short ADMIN_FLG_FALSE = 0;
 	public static final Short ADMIN_FLG_TRUE = 1;
-
+	
+	// 川渕佑太 – Task.26
+	/** 時間の最小値 */
+	public static final int MIN_HOUR = 0;
+	
+	/** 時間の最大値 */
+	public static final int MAX_HOUR = 24;
+	
+	/** 分の最小値 */
+	public static final int MIN_MINUTE = 0;
+	
+	/** 分の最大値 */
+	public static final int MAX_MINUTE = 60;
+	
+	/** 時刻フォーマット */
+	public static final String TIME_FORMAT = "%02d";
 }
