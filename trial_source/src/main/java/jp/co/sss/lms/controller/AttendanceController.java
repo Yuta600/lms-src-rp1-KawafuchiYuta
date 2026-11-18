@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,6 +16,7 @@ import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
+import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
 import jp.co.sss.lms.util.LoginUserUtil;
 
@@ -25,7 +28,9 @@ import jp.co.sss.lms.util.LoginUserUtil;
 @Controller
 @RequestMapping("/attendance")
 public class AttendanceController {
-
+	
+	@Autowired
+	private AttendanceUtil attendanceUtil;
 	@Autowired
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
@@ -142,15 +147,28 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+	public String complete(@Validated @ModelAttribute("attendanceForm") AttendanceForm attendanceForm, BindingResult result, Model model)
 			throws ParseException {
 		
 		// 川渕佑太 - Task.26
 		// 入力された時、分をhh:mm形式に変換
 		studentAttendanceService.formatConversion(attendanceForm);
+		
+		// 川渕佑太 - Task.27
+		// 更新時バリデーションを実行
+		studentAttendanceService.updateInputCheck(attendanceForm, result);
+		// エラー有りの場合、セレクトボックス用マップを設定して更新画面に戻る
+		if (result.hasErrors()) {
+			attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+			attendanceForm.setHourMap(attendanceUtil.setHourMap());
+			attendanceForm.setMinuteMap(attendanceUtil.setMinuteMap());
+			return "attendance/update";
+		}
+		
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);
+		
 		// 一覧の再取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
