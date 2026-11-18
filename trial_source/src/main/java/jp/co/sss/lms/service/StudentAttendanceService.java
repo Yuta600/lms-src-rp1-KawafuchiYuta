@@ -458,7 +458,7 @@ public class StudentAttendanceService {
 				// 
 				String nullField = trainingStartTimeHour == null ? "trainingStartTimeHour" : "trainingStartTimeMinute";
 				result.addError(new FieldError(
-						result.getObjectName(), //オブジェクト名 定型記述
+						result.getObjectName(), 
 						"attendanceList[" + i + "]." + nullField,
 						messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "出勤時間" })));
 			}
@@ -467,7 +467,7 @@ public class StudentAttendanceService {
 			if ((trainingEndTimeHour != null ^ trainingEndTimeMinute != null)) {
 				String nullField = trainingEndTimeHour == null ? "trainingEndTimeHour" : "trainingEndTimeMinute";
 				result.addError(new FieldError(
-						result.getObjectName(), //オブジェクト名 定型記述
+						result.getObjectName(), 
 						"attendanceList[" + i + "]." + nullField,
 						messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "退勤時間" })));
 			}
@@ -475,11 +475,11 @@ public class StudentAttendanceService {
 			// 出勤時間に入力なし、退勤時間に入力ありの場合、
 			if (trainingStartTime == null && trainingEndTime != null) {
 				result.addError(new FieldError(
-						result.getObjectName(), //オブジェクト名 定型記述
+						result.getObjectName(), 
 						"attendanceList[" + i + "].trainingStartTimeHour",
 						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY)));
 				result.addError(new FieldError(
-						result.getObjectName(), //オブジェクト名 定型記述
+						result.getObjectName(), 
 						"attendanceList[" + i + "].trainingStartTimeMinute",
 						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY)));
 			}
@@ -492,12 +492,12 @@ public class StudentAttendanceService {
 			if ((trainingStartTime != null && trainingEndTime != null)
 					&& trainingStartTime.compareTo(trainingEndTime) > 0) {
 				result.addError(new FieldError(
-						result.getObjectName(), //オブジェクト名 定型記述
+						result.getObjectName(), 
 						"attendanceList[" + i + "].trainingStartTimeHour",
 						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
 								new String[] { String.valueOf(i) })));
 				result.addError(new FieldError(
-						result.getObjectName(), //オブジェクト名 定型記述
+						result.getObjectName(), 
 						"attendanceList[" + i + "].trainingStartTimeMinute",
 						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
 								new String[] { String.valueOf(i) })));
@@ -508,21 +508,21 @@ public class StudentAttendanceService {
 			if (blankTime != null) {
 				if (trainingStartTime == null) {
 					result.addError(new FieldError(
-							result.getObjectName(), //オブジェクト名 定型記述
+							result.getObjectName(), 
 							"attendanceList[" + i + "].trainingStartTimeHour",
 							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "出勤時間" })));
 					result.addError(new FieldError(
-							result.getObjectName(), //オブジェクト名 定型記述
+							result.getObjectName(), 
 							"attendanceList[" + i + "].trainingStartTimeMinute",
 							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "出勤時間" })));
 				}
 				if (trainingEndTime == null) {
 					result.addError(new FieldError(
-							result.getObjectName(), //オブジェクト名 定型記述
+							result.getObjectName(), 
 							"attendanceList[" + i + "].trainingEndTimeHour",
 							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "退勤時間" })));
 					result.addError(new FieldError(
-							result.getObjectName(), //オブジェクト名 定型記述
+							result.getObjectName(), 
 							"attendanceList[" + i + "].trainingEndTimeMinute",
 							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "退勤時間" })));
 				}
@@ -534,7 +534,7 @@ public class StudentAttendanceService {
 						LocalTime.parse(trainingEndTime));
 				if (blankTime != null && blankTime > duration.toMinutes()) {
 					result.addError(new FieldError(
-							result.getObjectName(), //オブジェクト名 定型記述
+							result.getObjectName(), 
 							"attendanceList[" + i + "].blankTime",
 							messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR)));
 				}
