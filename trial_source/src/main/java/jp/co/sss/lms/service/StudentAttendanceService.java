@@ -487,12 +487,12 @@ public class StudentAttendanceService {
 					&& trainingStartTime.compareTo(trainingEndTime) > 0) {
 				result.addError(new FieldError(
 						result.getObjectName(), 
-						"attendanceList[" + i + "].trainingStartTimeHour",
+						"attendanceList[" + i + "].trainingEndTimeHour",
 						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
 								new String[] { String.valueOf(i) })));
 				result.addError(new FieldError(
 						result.getObjectName(), 
-						"attendanceList[" + i + "].trainingStartTimeMinute",
+						"attendanceList[" + i + "].trainingEndTimeMinute",
 						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
 								new String[] { String.valueOf(i) })));
 			}
@@ -526,7 +526,7 @@ public class StudentAttendanceService {
 			if (blankTime != null && trainingStartTime != null && trainingEndTime != null) {
 				Duration duration = Duration.between(LocalTime.parse(trainingStartTime),
 						LocalTime.parse(trainingEndTime));
-				if (blankTime != null && blankTime > duration.toMinutes()) {
+				if (blankTime > duration.toMinutes()) {
 					result.addError(new FieldError(
 							result.getObjectName(), 
 							"attendanceList[" + i + "].blankTime",
