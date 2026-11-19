@@ -40,7 +40,7 @@ public class AttendanceController {
 
 	/**
 	 * 勤怠管理画面 初期表示
-	 * @author 川渕佑太  – Task.25
+	 * 
 	 * @param lmsUserId
 	 * @param courseId
 	 * @param model
@@ -51,14 +51,16 @@ public class AttendanceController {
 	public String index(Integer ImsUserId, Integer courseId, Model model) throws ParseException {
 		
 		// 川渕佑太 – Task.25
-		// 本日日付を取得し、年月日形式にフォーマット
+		// 過去日未入力フラグ
+		boolean notEnterFlag = false;
+		// 受講生権限の場合
 		if (loginUserUtil.isStudent()) {
 			// 過去日未入力チェックの結果を取得
-			boolean notEnterFlag = studentAttendanceService.notEnterCheck();
-			
+			notEnterFlag = studentAttendanceService.notEnterCheck();
 			// modelへの値の設定
 			model.addAttribute("notEnterFlag", notEnterFlag);
 		}
+
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
