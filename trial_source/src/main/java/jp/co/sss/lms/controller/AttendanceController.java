@@ -51,12 +51,10 @@ public class AttendanceController {
 	public String index(Integer ImsUserId, Integer courseId, Model model) throws ParseException {
 		
 		// 川渕佑太 – Task.25
-		// 過去日未入力フラグ
-		boolean notEnterFlag = false;
 		// 受講生権限の場合
 		if (loginUserUtil.isStudent()) {
 			// 過去日未入力チェックの結果を取得
-			notEnterFlag = studentAttendanceService.notEnterCheck();
+			boolean notEnterFlag = studentAttendanceService.notEnterCheck();
 			// modelへの値の設定
 			model.addAttribute("notEnterFlag", notEnterFlag);
 		}
