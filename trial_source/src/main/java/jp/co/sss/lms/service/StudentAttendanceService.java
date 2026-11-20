@@ -378,12 +378,8 @@ public class StudentAttendanceService {
 		int notEnterCount = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
 				Constants.DB_FLG_FALSE, attendanceUtil.getTrainingDate());
 
-		// 1件以上存在する場合
-		if (notEnterCount > 0) {
-			return true;
-		}
-		// 存在しない場合
-		return false;
+		// 未入力が1件以上存在する場合、trueを返却する。
+		return notEnterCount > 0;
 	}
 	
 	/**
