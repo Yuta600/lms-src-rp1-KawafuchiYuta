@@ -35,6 +35,7 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	// 川渕佑太 - Task.25
 	@Autowired
 	private LoginUserUtil loginUserUtil;
 
