@@ -1,8 +1,11 @@
 package jp.co.sss.lms.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import jp.co.sss.lms.dto.CourseDto;
 import jp.co.sss.lms.dto.CourseServiceCourseDto;
 
 /**
@@ -31,5 +34,15 @@ public interface MCourseMapper {
 	 * @return コース数
 	 */
 	Integer getCourseCount(Integer courseId);
+	
+	
+	/**
+	 * コースDTOリスト「取得
+	 * 
+	 * @param hiddenFlg
+	 * @param deleteFlg
+	 * @return
+	 */
+	List<CourseDto> getCourseDtoList(@Param("hiddenFlg") Short hiddenFlg, @Param("deleteFlg") Short deleteFlg);
 
 }
