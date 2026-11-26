@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 川渕佑太 – Task.57 -->
+<mapper namespace="jp.co.sss.lms.mapper.TUserPlaceMapper">
+	<select id="getPlaceId" resultType="Integer">
+		SELECT
+			place_id
+		FROM
+			t_user_place
+		WHERE
+			lms_user_id = #{lmsUserId}
+			AND delete_flg = #{deleteFlg}
+	</select>
+</mapper>
