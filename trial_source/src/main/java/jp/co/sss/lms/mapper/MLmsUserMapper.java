@@ -1,5 +1,8 @@
 package jp.co.sss.lms.mapper;
 
+import java.util.Date;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,5 +25,23 @@ public interface MLmsUserMapper {
 	 */
 	UserDetailDto getUserDetail(@Param("lmsUserId") Integer lmsUserId,
 			@Param("deleteFlg") Short deleteFlg);
-
+	
+	/**
+	 * ユーザー基本情報検索
+	 * 
+	 * @param courseName
+	 * @param companyName
+	 * @param userName
+	 * @param placeIdList
+	 * @param role
+	 * @param deleteFlg
+	 * @return ユーザー基本情報DTOリスト
+	 */
+	List<UserDetailDto> getUserDetailForSearch(@Param("courseName") String courseName,
+			@Param("companyName") String companyName,
+			@Param("userName") String userName,
+			@Param("placeIdList") List<Integer> placeIdList,
+			@Param("role") String role,
+			@Param("closeTime") Date closeTime,
+			@Param("deleteFlg") Short deleteFlg);
 }
