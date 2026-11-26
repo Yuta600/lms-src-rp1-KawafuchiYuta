@@ -67,6 +67,12 @@ public class CourseService {
 
 	}
 	
+	/**
+	 * コースリスト取得
+	 * 
+	 * @author 川渕佑太 - Task.57
+	 * @return コースDTOリスト
+	 */
 	public List<CourseDto> getCourseDtoList() {
 		
 		List<CourseDto> courseDtoList = mCourseMapper.getCourseDtoList(Constants.DB_HIDDEN_FLG_FALSE, Constants.DB_FLG_FALSE);
