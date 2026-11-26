@@ -37,11 +37,12 @@ public interface MCourseMapper {
 	
 	
 	/**
-	 * コースDTOリスト「取得
+	 * コース詳細リスト取得
 	 * 
+	 * @author 川渕佑太 -Task.57
 	 * @param hiddenFlg
 	 * @param deleteFlg
-	 * @return
+	 * @return コースDTOリスト
 	 */
 	List<CourseDto> getCourseDtoList(@Param("hiddenFlg") Short hiddenFlg, @Param("deleteFlg") Short deleteFlg);
 
