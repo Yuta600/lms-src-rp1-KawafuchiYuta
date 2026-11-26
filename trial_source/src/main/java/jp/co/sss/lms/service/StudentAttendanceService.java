@@ -10,16 +10,24 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
+import jp.co.sss.lms.dto.CompanyDto;
+import jp.co.sss.lms.dto.CourseDto;
 import jp.co.sss.lms.dto.LoginUserDto;
+import jp.co.sss.lms.dto.PlaceDto;
+import jp.co.sss.lms.dto.UserDetailDto;
 import jp.co.sss.lms.entity.TStudentAttendance;
 import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
+import jp.co.sss.lms.form.AttendanceSearchForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
+import jp.co.sss.lms.mapper.MLmsUserMapper;
 import jp.co.sss.lms.mapper.TStudentAttendanceMapper;
+import jp.co.sss.lms.mapper.TUserPlaceMapper;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
 import jp.co.sss.lms.util.DateUtil;
@@ -50,6 +58,16 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
+	@Autowired
+	private CourseService courseService;
+	@Autowired
+	private PlaceService placeService;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private MLmsUserMapper mLmsUserMapper;
+	@Autowired
+	private TUserPlaceMapper tUserPlaceMapper;
 
 	/**
 	 * 勤怠一覧情報取得
@@ -530,6 +548,64 @@ public class StudentAttendanceService {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 勤怠検索フォーム情報取得
+	 * 
+	 * @author 川渕佑太 - Task.57
+	 * @param model
+	 */
+	public void getAttendanceSearchForm(Model model) {
+		// 講師権限の場合
+		if(loginUserUtil.isTeacher()) {
+			// コースリストを取得、フォームに設定
+			List<CourseDto> courseDtoList = courseService.getCourseDtoList();
+			model.addAttribute("courseList", courseDtoList);
+			// ログインユーザーの担当会場を取得、フォームに設定
+			PlaceDto placeDto = placeService.getPlaceDto();
+			model.addAttribute("place", placeDto);
+			// 企業リストを取得、フォームに設定
+			List<CompanyDto> companyDtoList = companyService.getCompanyDtoList();
+			model.addAttribute("companyList", companyDtoList);
+		}
+	}
+	
+	/**
+	 * 勤怠詳細DTOリスト取得
+	 * 
+	 * @author 川渕佑太 - Task.57
+	 * @param attendanceSearchForm
+	 * @return 勤怠詳細DTOリスト
+	 * @throws ParseException
+	 */
+	public List<UserDetailDto> getAttendanceDetailDtoList(AttendanceSearchForm attendanceSearchForm) throws ParseException {
+		
+		List<Integer> placeIdList = null;
+		// 講師権限の場合
+		if (loginUserUtil.isTeacher()) {
+			// ログインユーザーの担当会場を取得
+			placeIdList = tUserPlaceMapper.getPlaceId(loginUserDto.getLmsUserId(), Constants.DB_FLG_FALSE);
+		}
+		
+		String companyName;
+		// 企業担当者権限の場合
+		if (loginUserUtil.isCompany()) {
+			// ログインユーザーの企業名を取得
+			companyName = loginUserDto.getCompanyName();
+		} else {
+			// 検索フォームに入力された企業名を取得
+			companyName = attendanceSearchForm.getCompanyName();
+		}
+		// フォームからコース名、ユーザー名を取得
+		String courseName = attendanceSearchForm.getCourseName();
+		String userName = attendanceSearchForm.getUserName();
+		
+		// 検索条件に一致するユーザーの詳細情報を取得
+		List<UserDetailDto> userDetailList = mLmsUserMapper.getUserDetailForSearch(courseName, companyName, userName,
+				placeIdList, Constants.CODE_VAL_ROLL_STUDENT, new Date(), Constants.DB_FLG_FALSE);
+		
+		return userDetailList;
 	}
 
 }

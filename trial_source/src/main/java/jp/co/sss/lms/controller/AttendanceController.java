@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
+import jp.co.sss.lms.dto.UserDetailDto;
 import jp.co.sss.lms.form.AttendanceForm;
+import jp.co.sss.lms.form.AttendanceSearchForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
@@ -176,6 +178,23 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		return "attendance/detail";
+	}
+	
+	/**
+	 * 勤怠情報確認(受講生一覧)画面
+	 * 
+	 * @author 川渕佑太 – Task.57
+	 * @param attendanceSearchForm
+	 * @param model
+	 * @return 勤怠情報確認(受講生一覧)画面
+	 * @throws ParseException
+	 */
+	@RequestMapping(path = "/list", method = RequestMethod.GET)
+	public String list(AttendanceSearchForm attendanceSearchForm, Model model) throws ParseException {
+		studentAttendanceService.getAttendanceSearchForm(model);
+		List<UserDetailDto> userDetailList = studentAttendanceService.getAttendanceDetailDtoList(attendanceSearchForm);
+		model.addAttribute("userDetailList", userDetailList);
+		return "attendance/list";
 	}
 
 }
