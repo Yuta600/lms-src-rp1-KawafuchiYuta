@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+//import jakarta.validation.Valid;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.dto.UserDetailDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.AttendanceSearchForm;
+//import jp.co.sss.lms.form.BulkRegistForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
@@ -196,5 +198,34 @@ public class AttendanceController {
 		model.addAttribute("userDetailList", userDetailList);
 		return "attendance/list";
 	}
+	
+//	実装途中のためコメントアウト
+//	/**
+//	 * 勤怠一括登録画面 初期表示
+//	 * 
+//	 * @author 川渕佑太 - Task.58
+//	 * @param bulkRegist
+//	 * @return 勤怠一括登録フォーム
+//	 */
+//	@RequestMapping(path = "/bulkRegist", method = RequestMethod.GET)
+//	public String bulkRegist(BulkRegistForm bulkRegist) {
+//		studentAttendanceService.setBulkRegistForm(bulkRegist);
+//		return "attendance/bulkRegist";
+//	}
+	
+//	実装途中のためコメントアウト
+//	/**
+//	 * 勤怠一括登録画面 『検索』ボタン押下
+//	 * 
+//	 * @author 川渕佑太 - Task.58
+//	 * @param bulkRegistForm
+//	 * @param result
+//	 * @return
+//	 * @throws ParseException
+//	 */
+//	@RequestMapping(path = "/bulkRegist", params = "search", method = RequestMethod.GET)
+//	public String bulkRegistSearch(@Valid BulkRegistForm bulkRegistForm, BindingResult result) throws ParseException { studentAttendanceService.searchInputCheck(bulkRegistForm, result);
+//		return "attendance/bulkRegist";
+//	}
 
 }

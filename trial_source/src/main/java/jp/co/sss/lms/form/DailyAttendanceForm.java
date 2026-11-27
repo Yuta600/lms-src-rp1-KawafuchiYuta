@@ -25,10 +25,14 @@ public class DailyAttendanceForm {
 	private Integer trainingEndTimeHour;
 	/** 退勤時間(分) */
 	private Integer trainingEndTimeMinute;
-	/** 出勤時間 */
-	private String trainingStartTime;
-	/** 退勤時間 */
-	private String trainingEndTime;
+	/** 出勤時間(画面用) */
+	private String trainingStartTimeRaw;
+	/** 出勤時間(調整後) */
+	private String trainingStartTimeRounded;
+	/** 退勤時間(画面用) */
+	private String trainingEndTimeRaw;
+	/** 退勤時間(調整後) */
+	private String trainingEndTimeRounded;
 	/** 中抜け時間 */
 	private Integer blankTime;
 	/** 中抜け時間（画面表示用） */

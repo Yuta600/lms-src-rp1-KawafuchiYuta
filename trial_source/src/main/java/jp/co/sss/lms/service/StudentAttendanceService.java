@@ -19,13 +19,16 @@ import jp.co.sss.lms.dto.CompanyDto;
 import jp.co.sss.lms.dto.CourseDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.dto.PlaceDto;
+//import jp.co.sss.lms.dto.UserAttendanceDto;
 import jp.co.sss.lms.dto.UserDetailDto;
 import jp.co.sss.lms.entity.TStudentAttendance;
 import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.AttendanceSearchForm;
+//import jp.co.sss.lms.form.BulkRegistForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
 import jp.co.sss.lms.mapper.MLmsUserMapper;
+//import jp.co.sss.lms.mapper.MPlaceMapper;
 import jp.co.sss.lms.mapper.TStudentAttendanceMapper;
 import jp.co.sss.lms.mapper.TUserPlaceMapper;
 import jp.co.sss.lms.util.AttendanceUtil;
@@ -68,6 +71,10 @@ public class StudentAttendanceService {
 	private MLmsUserMapper mLmsUserMapper;
 	@Autowired
 	private TUserPlaceMapper tUserPlaceMapper;
+//	@Autowired
+//	private MPlaceMapper mPlaceMapper;
+//	@Autowired
+//	private TrainingTime trainingTime;
 
 	/**
 	 * 勤怠一覧情報取得
@@ -341,11 +348,11 @@ public class StudentAttendanceService {
 			
 			// 出勤時刻整形
 			TrainingTime trainingStartTime = null;
-			trainingStartTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());
+			trainingStartTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTimeRaw());
 			tStudentAttendance.setTrainingStartTime(trainingStartTime.getFormattedString());
 			// 退勤時刻整形
 			TrainingTime trainingEndTime = null;
-			trainingEndTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTime());
+			trainingEndTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTimeRaw());
 			tStudentAttendance.setTrainingEndTime(trainingEndTime.getFormattedString());
 				
 			// 中抜け時間
@@ -413,7 +420,7 @@ public class StudentAttendanceService {
 			Integer trainingStartTimeMinute = dailyAttendanceForm.getTrainingStartTimeMinute();
 			// 出勤時刻を結合
 			if (trainingStartTimeHour != null && trainingStartTimeMinute != null) {
-				dailyAttendanceForm.setTrainingStartTime(String.format(Constants.TIME_FORMAT, trainingStartTimeHour)
+				dailyAttendanceForm.setTrainingStartTimeRaw(String.format(Constants.TIME_FORMAT, trainingStartTimeHour)
 						+ ":" + String.format(Constants.TIME_FORMAT, trainingStartTimeMinute));
 			}
 			
@@ -421,7 +428,7 @@ public class StudentAttendanceService {
 			Integer trainingEndTimeMinute = dailyAttendanceForm.getTrainingEndTimeMinute();
 			// 退勤時刻を結合
 			if (trainingEndTimeHour != null && trainingEndTimeMinute != null) {
-				dailyAttendanceForm.setTrainingEndTime(String.format(Constants.TIME_FORMAT, trainingEndTimeHour) + ":" + String.format(Constants.TIME_FORMAT, trainingEndTimeMinute));
+				dailyAttendanceForm.setTrainingEndTimeRaw(String.format(Constants.TIME_FORMAT, trainingEndTimeHour) + ":" + String.format(Constants.TIME_FORMAT, trainingEndTimeMinute));
 			}
 		}
 	}
@@ -448,9 +455,9 @@ public class StudentAttendanceService {
 			// 退勤時間(分)
 			Integer trainingEndTimeMinute = attendance.get(i).getTrainingEndTimeMinute();
 			// 出勤時間(HH:mm)
-			String trainingStartTime = attendance.get(i).getTrainingStartTime();
+			String trainingStartTime = attendance.get(i).getTrainingStartTimeRaw();
 			// 退勤時間(HH:mm)
-			String trainingEndTime = attendance.get(i).getTrainingEndTime();
+			String trainingEndTime = attendance.get(i).getTrainingEndTimeRaw();
 			// 中抜け時間
 			Integer blankTime = attendance.get(i).getBlankTime();
 
@@ -607,5 +614,68 @@ public class StudentAttendanceService {
 		
 		return userDetailList;
 	}
-
+	
+//	実装途中のためコメントアウト
+//	/**
+//	 * @param bulkRegistForm
+//	 */
+//	public void setBulkRegistForm(BulkRegistForm bulkRegistForm) {
+//		PlaceDto placeDto = placeService.getPlaceDto();
+//		bulkRegistForm.setPlaceName(placeDto.getPlaceName() + placeDto.getPlaceNote());
+//	}
+//	
+//	public void searchInputCheck(BulkRegistForm bulkRegistForm, BindingResult result) throws ParseException{
+//		if (result.hasErrors()) return;
+//		Date searchPeriodFrom = dateUtil.parse(bulkRegistForm.getSearchPeriodFrom());
+//		Date searchPeriodTo = dateUtil.parse(bulkRegistForm.getSearchPeriodTo());
+//		if (searchPeriodTo.compareTo(attendanceUtil.getTrainingDate()) < 0) {
+//			result.addError(new FieldError(result.getObjectName(), "searchPeriodFrom",
+//					messageUtil.getMessage(Constants.VALID_KEY_SEARCHTORANGEERROR,
+//							new String[] { messageUtil.getMessage("searchPeriodTo") })));
+//			return;
+//		}
+//		if (searchPeriodFrom.compareTo(searchPeriodTo) < 0) {
+//			result.addError(new FieldError(result.getObjectName(), "searchPeriodFrom",
+//					messageUtil.getMessage(Constants.VALID_KEY_SEARCHPERIODCOMPAREERROR,
+//							new String[] { messageUtil.getMessage("searchPeriodTo"), messageUtil.getMessage("searchPeriodFrom")  })));
+//			return;
+//		}
+//		if (dateUtil.differenceDays(searchPeriodFrom, searchPeriodTo) > 30) {
+//			result.addError(new FieldError(result.getObjectName(), "searchPeriodFrom",
+//					messageUtil.getMessage(Constants.VALID_KEY_SEARCHSETTINGOVER,
+//							new String[] { messageUtil.getMessage("searchPeriodTo"), "30" })));
+//			return;
+//		}
+//		
+//		List<UserAttendanceDto> userAttendanceDtoList = mPlaceMapper.getUserAttendanceDto(bulkRegistForm.getPlaceId(),
+//				searchPeriodFrom, searchPeriodTo, Constants.DB_FLG_FALSE);
+//		List<DailyAttendanceForm> dailyAttendanceFormList = bulkRegistForm.getDailyAttendanceFormList();
+//		for(int i = 0; i < userAttendanceDtoList.size(); i++) {
+//			UserAttendanceDto userAttendanceDto = userAttendanceDtoList.get(i);
+//			DailyAttendanceForm dailyAttendanceForm = dailyAttendanceFormList.get(i);
+//			
+//			dailyAttendanceForm.setDispTrainingDate(userAttendanceDto.getTrainingDate().toString());
+//			dailyAttendanceForm.setTrainingStartTimeRaw(null == userAttendanceDto.getTrainingStartTime() ? "未入力" : userAttendanceDto.getTrainingStartTime());
+//			dailyAttendanceForm.setTrainingEndTimeRaw(null == userAttendanceDto.getTrainingEndTime() ? "未入力" : userAttendanceDto.getTrainingEndTime());
+//			TrainingTime workStartTime = new TrainingTime(9, 0);
+//			TrainingTime trainingStartTime = new TrainingTime(userAttendanceDto.getTrainingStartTime()).roundUp();
+//			TrainingTime trainingStartTimeRounded = new TrainingTime().max(workStartTime, trainingStartTime);
+//			dailyAttendanceForm.setTrainingStartTimeRounded(trainingStartTimeRounded.toString());
+//			TrainingTime workEndTime = new TrainingTime(18, 0);
+//			TrainingTime trainingEndTime = new TrainingTime(userAttendanceDto.getTrainingEndTime()).roundDown();
+//			TrainingTime trainingEndTimeRounded = new TrainingTime().min(workEndTime, trainingEndTime);
+//			dailyAttendanceForm.setTrainingEndTimeRounded(trainingEndTimeRounded.toString());
+//			dailyAttendanceForm.setBlankTimeValue(userAttendanceDto.getBlankTime().toString());
+//			dailyAttendanceForm.setStatusDispName(userAttendanceDto.getStatus());
+//			
+//			
+//		}
+//	}
+//	
+//	public String bulkUpdate(BulkRegistForm bulkRegistForm) throws ParseException {
+//		for (DailyAttendanceForm dailyAttendanceForm : bulkRegistForm.getDailyAttendanceFormList()) {
+//			
+//		}
+//		return "";
+//	}
 }

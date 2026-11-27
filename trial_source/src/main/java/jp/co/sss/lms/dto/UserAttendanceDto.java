@@ -35,7 +35,7 @@ public class UserAttendanceDto {
 	/** 中抜け時間 */
 	private Integer blankTime;
 	/** 勤怠状態 */
-	private Short status;
+	private String status;
 	/** 備考 */
 	private String note;
 
